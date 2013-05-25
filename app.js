@@ -8,7 +8,14 @@ var express = require('express')
   , http = require('http')
   , path = require('path');
 
-var app = express();
+var app = express(),
+  corsSupport = function () {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+
+    next();
+  };
 
 // all environments
 app.set('port', process.env.PORT || 3000);
