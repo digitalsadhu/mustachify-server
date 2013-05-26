@@ -9,7 +9,7 @@ var express = require('express')
   , path = require('path');
 
 var app = express(),
-  corsSupport = function () {
+  corsSupport = function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
@@ -25,8 +25,10 @@ app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
+app.use(corsSupport);
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
+
 
 // development only
 if ('development' == app.get('env')) {
@@ -35,6 +37,9 @@ if ('development' == app.get('env')) {
 
 app.post('/', routes.indexPOST);
 app.get('/', routes.indexGET);
+app.options("/", function(req, res){
+  res.send();
+})
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
