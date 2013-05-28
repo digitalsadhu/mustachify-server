@@ -9,7 +9,16 @@ var fs = require('fs'),
 
 exports.indexPOST = function(req, res){
   console.log("indexPOST");
-  console.log(req.files.image.path);
+  // var datas = [];
+  // debugger;
+  // req.addListener("end", function() {
+  //   debugger;
+  //   var a = req;
+  // });
+  // req.addListener("data", function(data) {
+  //   datas.push(data);
+  //   console.log("receiving datas");
+  // });
   file = fs.readFile(req.files.image.path, function(err, data) {
     if (err) {
       console.log('upload failed: ');

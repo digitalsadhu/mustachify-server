@@ -7,7 +7,8 @@
   },
   "dependencies": {
     "express": "3.2.5",
-    "jade": "*"
+    "jade": "*",
+    "connect": "~2.7.10"
   },
   "engines": {
     "node": "0.10.x",

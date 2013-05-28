@@ -6,13 +6,15 @@
 var express = require('express')
   , routes = require('./routes')
   , http = require('http')
+  , connect = require('connect')
   , path = require('path');
 
 var app = express(),
   corsSupport = function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, X-Requested-With');
+    res.header('Access-Control-Max-Age', '1728000');
 
     next();
   };
@@ -23,7 +25,7 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.use(express.favicon());
 app.use(express.logger('dev'));
-app.use(express.bodyParser());
+app.use(connect.bodyParser());
 app.use(express.methodOverride());
 app.use(corsSupport);
 app.use(app.router);
