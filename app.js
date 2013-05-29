@@ -7,7 +7,8 @@ var express = require('express')
   , routes = require('./routes')
   , http = require('http')
   , connect = require('connect')
-  , path = require('path');
+  , path = require('path')
+  , imageEventStream = require('./imageEventStream');
 
 var app = express(),
   corsSupport = function (req, res, next) {
@@ -41,7 +42,28 @@ app.post('/', routes.indexPOST);
 app.get('/', routes.indexGET);
 app.options("/", function(req, res){
   res.send();
-})
+});
+
+app.get('/eventSource', function eventSourceHandler(request, response) {
+
+  response.writeHead(200, {
+    "Content-Type":"text/event-stream",
+    "Cache-Control":"no-cache",
+    "Connection":"keep-alive"
+  });
+
+  function newImageNotifier() {
+    response.write('event: image_changed\n\n');
+    response.write('data: ' + "there is a new image" + '\n\n');
+  }
+
+  imageEventStream.on("new_image", newImageNotifier);
+
+  request.on('close', function () {
+    // Unsubscribe
+    imageEventStream.removeListener("new_image", newImageNotifier);
+  });
+});
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

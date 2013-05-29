@@ -4,6 +4,7 @@
  */
 
 var fs = require('fs'),
+  imageEventStream = require('../imageEventStream'),
   file,
   fileData;
 
@@ -27,6 +28,7 @@ exports.indexPOST = function(req, res){
     } else {
       fileData = data;
       res.send({ success: "YES" });
+      imageEventStream.emit("new_image");
     }
   });
 };
